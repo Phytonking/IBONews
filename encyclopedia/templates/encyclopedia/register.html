@@ -1,0 +1,29 @@
+{% extends "encyclopedia/layout.html" %}
+<!-- Make changes for registration form-->
+{% block title %}
+    Login
+{% endblock %}
+
+
+{% block body %}
+    <section class="hero">
+        <div class="hero-content">
+        <h1>Register</h1>
+        <p>Have an account? Click here to <a href="{% url 'encyclopedia:register' %}">Login</a></p>
+        </div>
+    </section>
+
+    <section class="services">
+        <form action="{% url 'encyclopedia:register' %}" method="post">
+        {% csrf_token %}
+        <input name="Fname" placeholder="First Name" type="text"><br><br>
+        <input name="Lname" placeholder="Last Name" type="text"><br><br>
+        <input name="username" placeholder="Username" type="text"><br><br>
+        <input name="email" placeholder="Email" type="email"><br><br>
+        <input name="password" placeholder="Password" type="password"><br><br>
+        <input name="c_password" placeholder="Confirm Password" type="password"><br><br>
+        <input type="submit" class="w3-button w3-black" value="Login">
+        <p style="color: red">{{error}}</p>
+        </form>
+    </section>
+{% endblock %}

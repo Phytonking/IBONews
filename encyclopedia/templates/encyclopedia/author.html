@@ -1,0 +1,48 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    {{site.title}}
+{% endblock %}
+
+{% block body %}
+<style>
+    .container {
+          display: flex;
+          align-items: center;
+        }
+    .image {
+          max-width: 400px;
+          max-height: 300px;
+          margin-right: 20px;
+        }
+</style>
+<main>
+    <div class="container">
+        <div>
+            <h2>{{User.name}}</h2><br>
+            <p> <span><i class="fa-solid fa-location-dot"></i></span> {{User.location}}</p><br>
+            <p>{{User.bio}}</p>
+        </div>
+    </div>
+    <hr>
+    <h1>{{User.name}}'s Works</h1>
+    {% for x in posts %} 
+            
+                <div class="container" style="border: 2px solid black; margin-bottom: 20px;">
+                    <img class="image" src="{{x.image}}" alt="An Example Image">
+                    <div>
+                    <a href="{% url 'encyclopedia:article' x.article_id %}">
+                        <h2>{{x.title}}</h2>
+                    </a>
+                    <p>By {{x.author.name}}, Published {{x.date_published}}</p>
+                    <hr>
+                    <p>{{x.description}}</p>
+                    </div>
+                </div>
+           
+        {% endfor %}
+</main>
+    
+    
+
+{% endblock %}  

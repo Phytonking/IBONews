@@ -1,0 +1,38 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    My Liked Articles
+{% endblock %}
+
+{% block body %}
+    <style>
+        .container {
+          display: flex;
+          align-items: center;
+          border: 2px black solid;
+        }
+      
+        .image {
+          max-width: 400px;
+          max-height: 300px;
+          margin-right: 20px;
+        }
+      </style>
+
+      <h1>My Liked Articles</h1>
+        {% for x in posts %} 
+            
+                <div class="container">
+                    <img class="image" src="{{x.image}}" alt="An Example Image">
+                    <div>
+                    <a href="{% url 'encyclopedia:article' x.article_id %}">
+                        <h2>{{x.title}}</h2>
+                    </a>
+                    <p>By {{x.author.name}}, Published {{x.date_published}}</p>
+                    <hr>
+                    <p>{{x.description}}</p>
+                    </div>
+                </div>
+           
+        {% endfor %}
+{% endblock %}

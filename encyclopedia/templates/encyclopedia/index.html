@@ -1,0 +1,89 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    r/IBONews
+{% endblock %}
+
+{% block body %}
+    {% if user.is_authenticated != True %}
+    <h1>Welcome to the IBONews</h1>
+    <main>
+        <section>
+            <h2><b>What is this Project?</b></h2>
+            <p>This is r/IBO Newspaper. This way, members can share their writings and their talents, such as drawing, and even music. Not only these, but this newspaper can allow members to share their stories, tips, and help one another, which is essentially the purpose of this server. This can serve as a platform for students to explore issues that are important to them and their peers, such as social justice, mental health, academic stress, and the IBO, of course.
+
+                This project will not only help bring the community together, but it will also help students develop their writing, editing, and digital media skills, which can be beneficial for the diploma programme, and even possibly their future academic and professional careers. Partaking in this project can help members to promote critical thinking, awareness, and advocacy, for things they’re interested about.
+                </p>
+        </section>
+        <section>
+            <h2>What We Offer</h2>
+            <ul>
+                <li><strong>Creativity Unleashed:</strong> We celebrate the artistic flair of our members...</li>
+                <li><strong>Stories and Tips:</strong> We believe in the power of storytelling...</li>
+                <li><strong>Support and Collaboration:</strong> Our platform encourages collaboration and mutual support...</li>
+                <li><strong>Addressing Important Issues:</strong> The IB journey isn't just about academics...</li>
+            </ul>
+        </section>
+        <section>
+            <h2>A Catalyst for Growth</h2>
+            <p>We've crossed the incredible milestone of 50k members – a population larger than many small towns!...</p>
+        </section>
+        <section>
+            <h2>CAS Project Integration</h2>
+            <p>Recognizing the limitations of the CAS (Creativity, Activity, Service) channel, we've incorporated...</p>
+        </section>
+        <section>
+            <h2>Join Us!</h2>
+            <p>We invite you to be a part of this exciting journey...</p>
+            <ul>
+                <li><strong>Access Exclusive Content:</strong> By signing up for a <a href="">FREE account</a></li>
+                <li><strong>Stay Informed:</strong> Stay up-to-date with the latest publications and contributions with our <a href="">Newsletter!</a></li>
+            </ul>
+            <p>Join us in celebrating the diversity of talent, ideas, and experiences within the IB community!</p>
+        </section>
+        <!-- Subscribe section -->
+        <div class="w3-container w3-light-grey w3-padding-32">
+            <h1>Subscribe</h1>
+            <p>To get our newsletter:</p>
+            <form action="">
+                <p><input class="w3-input w3-border" type="text" placeholder="Enter e-mail" style="width:100%"></p>
+                <input type="submit" class="w3-button w3-red w3-margin-bottom" value="Subscribe">
+            </form>
+        </div>
+    </main>
+    {% else %} 
+    <style>
+        .container {
+          display: flex;
+          align-items: center;
+          border: 2px black solid;
+        }
+      
+        .image {
+          max-width: 400px;
+          max-height: 300px;
+          margin-right: 20px;
+        }
+      </style>
+      <h1>Articles</h1>
+      {% if count == 0 %}
+        <h3>No Articles found or published yet. Come back soon!</h3>
+      {% else %}
+        {% for x in posts %} 
+            
+                <div class="container">
+                    <img class="image" src="{{x.image}}" alt="An Example Image">
+                    <div>
+                    <a href="{% url 'encyclopedia:article' x.article_id %}">
+                        <h2>{{x.title}}</h2>
+                    </a>
+                    <p>By {{x.author.name}}, Published {{x.date_published}}</p>
+                    <hr>
+                    <p>{{x.description}}</p>
+                    </div>
+                </div>
+           
+        {% endfor %}
+    {% endif %}
+    {% endif %}
+{% endblock %}

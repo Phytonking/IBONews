@@ -1,0 +1,93 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    {{site.title}}
+{% endblock %}
+
+{% block body %}
+<style>
+    .container {
+          display: flex;
+          align-items: center;
+        }
+    .image {
+          max-width: 400px;
+          max-height: 300px;
+          margin-right: 20px;
+        }
+    .comment{
+        border: 2px solid black;
+        border-radius: 2px;
+        max-width: 90%;
+    }
+    .innerCom {
+        margin-left:20px;
+    }
+</style>
+<main>
+    <div class="container">
+        <img class="image" src="{{site.image}}" alt="image">
+        <div>
+            <h2>{{site.title}}</h2>
+            <p>By <a href="{% url 'encyclopedia:author' site.author.name %}">{{site.author.name}}</a>, Published {{site.date_published}}</p>
+            {% if liked %}
+                <p><span><a href="{% url 'encyclopedia:like' site.article_id %}"><i class="fa-solid fa-heart" style="color: red;"></i></a></span> {{like_count}}</p>
+            {% else %}
+                <p><span><a href="{% url 'encyclopedia:like' site.article_id %}"><i class="fa-regular fa-heart" style="color: red;"></i></a></span> {{like_count}}</p>
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    {{content | safe}}
+    <hr>
+    <h3>Comments</h3>
+    <div class="comments">
+        <div class="comment">
+            <div class="innerCom" style="max-height: 250px;">
+                <h4>New Comment</h4>
+                <form action="{% url 'encyclopedia:comment' site.article_id %}" method="POST" style="margin:20px">
+                    {% csrf_token %}
+                    <textarea name="commentContent" rows="4" cols="50" style="width:90%; height:150px;" placeholder="Text goes here"></textarea><br>
+                    <input type="submit" class="w3-button w3-light-grey">
+                </form>
+            </div>  
+        </div>
+        {% for comment in comments %} 
+            <div class="comment" style="margin-top: 10px;">
+                <div class="innerCom" id="{{comment.commentid}}">
+                    <p>{{comment.date_commented}}</p>
+                    <p>{{comment.commenter.username}} said:</p>
+                    <p>{{comment.comment_content}}</p>
+                    {% if comment.commenter == user %} 
+                        <p><span><a href="{% url 'encyclopedia:del_comment' site.article_id comment.commentid %}" class="w3-button w3-light-grey"><i class="fa-solid fa-trash"></i> Delete</a></span> </p>
+                        <p><span><a onclick="open_close_editor('{{comment.commentid}}')" class="w3-button w3-light-grey"><i class="fa-solid fa-pen-to-square"></i> Edit</a></span> </p>
+                        
+                        <div class="innerCom" style="max-height: 250px; display: none;" id="{{comment.commentid}}_edit">
+                            <h4>Edit Comment</h4>
+                            <form action="{% url 'encyclopedia:edit_comment' site.article_id comment.commentid %}" method="POST" style="margin:20px">
+                                {% csrf_token %}
+                                <textarea name="commentContent" rows="4" cols="50" style="width:90%; height:150px;" placeholder="Text goes here"></textarea><br>
+                                <input type="submit" class="w3-button w3-light-grey">
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        function open_close_editor(commentID){
+            var doc = document.getElementById(`${commentID}_edit`);
+            if (doc.style.display == "none"){
+                doc.style.display = "block";
+            } else {
+                doc.style.display = "none";
+            }
+        }
+    </script>
+</main>
+    
+    
+
+{% endblock %}  

@@ -1,0 +1,26 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+
+{% block body %}
+    <section class="hero">
+        <div class="hero-content">
+        <h1>Login</h1>
+        <p>Don't have an account? Click here to <a href="{% url 'encyclopedia:register' %}">Register</a></p>
+        </div>
+    </section>
+
+    <section class="services">
+        <form action="{% url 'encyclopedia:login' %}" method="post">
+        {% csrf_token %}
+        <input name="username" placeholder="Username" type="text"><br><br>
+        <input name="password" placeholder="Password" type="password"><br><br>
+        <input type="submit" class="w3-button w3-black" value="Login">
+        <p style="color: red">{{error}}</p>
+        </form>
+    </section>
+{% endblock %}
+
