@@ -20,5 +20,7 @@ urlpatterns = [
     path("comment/<uuid:articleID>/<uuid:commentID>/delete", wv.del_comment, name="del_comment"),
     path("comment/<uuid:articleID>/<uuid:commentID>/edit", wv.edit_comment, name="edit_comment"),
     path("like/<uuid:articleID>", wv.like, name="like"),
+    #path("unsubscribe/<str:email>", wv.unsubscriber_view, name="unsubscribe"),
+    path("settings", wv.settings, name="settings"),
     
 ]

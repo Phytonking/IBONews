@@ -2,9 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
-class Subscriber(models.Model):
-    subscriber_person = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="subscriber")
-    is_subscribed = models.BooleanField(null=True)
+class Settings(models.Model):
+    for_user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_settings")
+    subscriber = models.BooleanField(null=True, auto_created=True)
+    DarkMode = models.BooleanField(null=True)
+
+    def __str__(self):
+        return self.for_user.username
 
 class Classification(models.Model):
     name = models.TextField()
@@ -63,3 +67,4 @@ class ArticleComment(models.Model):
 
     def __str__(self):
         return self.commentid
+

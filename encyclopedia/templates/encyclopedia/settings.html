@@ -1,0 +1,23 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Featured Articles
+{% endblock %}
+
+{% block body %}
+    <style>
+        
+      </style>
+
+      <h1>Settings</h1><hr>
+        <form action="{% url 'encyclopedia:settings' %}" method="POST">
+          {% csrf_token %}
+            <input type="checkbox" id="subscription" name="subscribe" value="subscibe" {% if subscribe %} checked {% endif %}>
+            <label for="subscription"><p>Subscribe to monthly newsletter</p></label><br>
+            <p>Newsletter emails will be sent to this account's email every month.</p><br>
+            <input type="checkbox" id="darkMode" name="DarkMode" value="dark" {% if darkMode %} checked {% endif %}>
+            <label for="darkMode"><p>Enable Dark Mode</p></label><br>
+            <input class="w3-button w3-light-grey" type="submit">
+            <h3 style="color:red;">{{message}}</h3>
+        </form>
+{% endblock %}

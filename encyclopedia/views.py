@@ -15,6 +15,38 @@ from django.contrib.auth.models import User
 import random
 import datetime
 
+
+@login_required(login_url='/login')
+def settings(request: HttpRequest):
+    u = request.user
+    setting = Settings.objects.get(for_user=u)
+    if request.method == "GET":
+        return render(request, "encyclopedia/settings.html", {"subscribe":setting.subscriber, "darkMode":setting.DarkMode})
+    else:
+        lk = request.POST.get("subscribe")
+        dm = request.POST.get("DarkMode")
+        print(dm)
+        if lk is not None:
+            setting.subscriber = True
+        else:
+            setting.subscriber = False
+        if dm == "dark":
+            setting.DarkMode = True
+        else:
+            setting.DarkMode = False
+        setting.save()
+        return render(request, "encyclopedia/settings.html", {"message":"Settings Saved"})
+
+"""
+def unsubscriber_view(request: HttpRequest, email: str):
+    try:
+        x = Subscriber.objects.get(subscriber_email=email)
+        x.delete()
+    except Subscriber.DoesNotExist:
+        pass
+    return render(request, "encyclopedia/unsubscribe.html", {"email":email})
+"""
+
 # Create your views here.
 def index(request: HttpRequest):
     return render(request, "encyclopedia/index.html", {"posts": Article.objects.all(), "Classification": Classification.objects.all()})
@@ -48,10 +80,10 @@ def article_view(request: HttpRequest, articleID: UUID):
 def search_result(request: HttpRequest):
     if request.method == "POST":
         result = []
-        searchKey = request.POST["q"]
+        searchKey = request.POST["q"].lower()
         t = Article.objects.all()
         for x in t:
-            if searchKey in x.title:
+            if searchKey in x.title.lower() or searchKey in x.textual_content.lower():
                 result.append(x)
             else:
                 continue
