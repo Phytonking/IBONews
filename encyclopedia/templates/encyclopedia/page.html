@@ -16,7 +16,12 @@
           margin-right: 20px;
         }
     .comment{
-        border: 2px solid black;
+        {% if dm %} 
+            border: 2px solid azure;
+        {% else %} 
+            border: 2px solid black;
+        {% endif %}
+        
         border-radius: 2px;
         max-width: 90%;
     }

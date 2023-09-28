@@ -21,7 +21,7 @@ def settings(request: HttpRequest):
     u = request.user
     setting = Settings.objects.get(for_user=u)
     if request.method == "GET":
-        return render(request, "encyclopedia/settings.html", {"subscribe":setting.subscriber, "darkMode":setting.DarkMode})
+        return render(request, "encyclopedia/settings.html", {"subscribe":setting.subscriber, "darkMode":setting.DarkMode, "dm": hasDarkMode(u)})
     else:
         lk = request.POST.get("subscribe")
         dm = request.POST.get("DarkMode")
@@ -35,7 +35,7 @@ def settings(request: HttpRequest):
         else:
             setting.DarkMode = False
         setting.save()
-        return render(request, "encyclopedia/settings.html", {"message":"Settings Saved"})
+        return render(request, "encyclopedia/settings.html", {"message":"Settings Saved","dm": hasDarkMode(u),"subscribe":setting.subscriber, "darkMode":setting.DarkMode})
 
 """
 def unsubscriber_view(request: HttpRequest, email: str):
@@ -49,10 +49,10 @@ def unsubscriber_view(request: HttpRequest, email: str):
 
 # Create your views here.
 def index(request: HttpRequest):
-    return render(request, "encyclopedia/index.html", {"posts": Article.objects.all(), "Classification": Classification.objects.all()})
+    return render(request, "encyclopedia/index.html", {"posts": Article.objects.all(), "Classification": Classification.objects.all(),"dm": hasDarkMode(request.user)})
 
 def about(request: HttpRequest):
-    return render(request, "encyclopedia/about.html",{"Classification": Classification.objects.all()})
+    return render(request, "encyclopedia/about.html",{"Classification": Classification.objects.all(),"dm": hasDarkMode(request.user)})
 
 @login_required(login_url='/login')
 def article_view(request: HttpRequest, articleID: UUID):
@@ -73,7 +73,8 @@ def article_view(request: HttpRequest, articleID: UUID):
                 "Classification": Classification.objects.all(),
                 "liked":liked,
                 "like_count":LikedArticle.objects.filter(article=Article.objects.get(article_id=articleID)).count(),
-                "comments":ArticleComment.objects.filter(article=Article.objects.get(article_id=articleID))
+                "comments":ArticleComment.objects.filter(article=Article.objects.get(article_id=articleID)),
+                "dm": hasDarkMode(request.user)
             }
         )
 @login_required(login_url='/login')
@@ -87,16 +88,16 @@ def search_result(request: HttpRequest):
                 result.append(x)
             else:
                 continue
-        return render(request, "encyclopedia/searched.html", {"results":result,"Classification": Classification.objects.all(), "searched":searchKey})
+        return render(request, "encyclopedia/searched.html", {"results":result,"Classification": Classification.objects.all(), "searched":searchKey, "dm": hasDarkMode(request.user)})
     else:
-        return render(request, "encyclopedia/search.html")
+        return render(request, "encyclopedia/search.html", {"dm": hasDarkMode(request.user)})
 
 @login_required(login_url="/login")
 def author_page(request: HttpRequest, AuthorName: str):
     if request.method == "GET":
         author_info = Author.objects.get(name=AuthorName)
         t = Article.objects.filter(author=author_info)
-        return render(request, "encyclopedia/author.html",{"posts":t, "User":author_info, "Classification": Classification.objects.all()})
+        return render(request, "encyclopedia/author.html",{"posts":t, "User":author_info, "Classification": Classification.objects.all(), "dm": hasDarkMode(request.user)})
 
 
 @login_required(login_url='/login')
@@ -114,13 +115,13 @@ def classification_view(request: HttpRequest, classif: str):
     if request.method == "GET":
         classi = Classification.objects.get(name=classif)
         art = Article.objects.filter(article_classification=classi)
-        return render(request, "encyclopedia/index.html", {"posts": art, "Classification": Classification.objects.all(), "classification": classif, "count":art.count()})
+        return render(request, "encyclopedia/classification.html", {"posts": art, "Classification": Classification.objects.all(), "classification": classif, "count":art.count(),"dm": hasDarkMode(request.user)})
 
 @login_required(login_url='/login')
 def featured_view(request: HttpRequest):
     if request.method == "GET":
         art = Article.objects.filter(featured=True)
-        return render(request, "encyclopedia/index.html", {"posts": art, "Classification": Classification.objects.all(), "count":art.count()})
+        return render(request, "encyclopedia/index.html", {"posts": art, "Classification": Classification.objects.all(), "count":art.count(),"dm": hasDarkMode(request.user)})
 
 @login_required(login_url='/login')
 def liked_view(request: HttpRequest):
@@ -129,7 +130,7 @@ def liked_view(request: HttpRequest):
         art = []
         for x in t:
             art.append(x.article)
-        return render(request, "encyclopedia/likedArticles.html", {"posts": art, "Classification": Classification.objects.all()})
+        return render(request, "encyclopedia/likedArticles.html", {"posts": art, "Classification": Classification.objects.all(),"dm": hasDarkMode(request.user)})
 
 @login_required(login_url='/login')
 def comment_view(request: HttpRequest, articleID: UUID):

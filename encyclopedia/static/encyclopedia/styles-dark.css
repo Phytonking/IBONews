@@ -2,7 +2,9 @@ body {
     margin: 0;
     background-color: black;
 }
-
+nav, #mySidebar {
+    background-color:#28292b;
+}
 code {
     white-space: pre;
 }
@@ -30,9 +32,8 @@ textarea {
     line-height: 15px;
 }
 
-.sidebar {
+.sidebar{
     background-color: #28292b;
-    height: 100vh;
     padding: 20px;
 }
 
