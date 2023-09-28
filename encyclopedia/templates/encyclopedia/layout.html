@@ -36,14 +36,13 @@
               <a href="{% url 'encyclopedia:featured' %}" class="w3-bar-item w3-button" style="width: 100%"><p>Featured Articles</p></a>
               <a href="{% url 'encyclopedia:liked' %}" class="w3-bar-item w3-button" style="width: 100%"><p>My Liked Articles</p></a>
               
-              <a onclick="myAccFunc()" href="javascript:void(0)" class="w3-button w3-block w3-left-align" id="myBtn">
-                <p>Articles by Topic</p><i class="fa fa-caret-down"></i>
-              </a>
+              <a onclick="myAccFunc()" class="w3-button w3-block w3-left-align" id="myBtn"><p>Articles by Topic</p><i class="fa-solid fa-caret-right" id="caret"></i></a>
               <div id="demoAcc" class="w3-bar-block w3-hide w3-padding-large w3-medium">
                 {% for cl in Classification %}
-                    <a href="{% url 'encyclopedia:topic' cl.name %}" class="w3-bar-item w3-button ">"<p>{{cl.name}}</p></a>                
+                    <a href="{% url 'encyclopedia:topic' cl.name %}" class="w3-bar-item w3-button"><i class="fa-solid fa-caret-right"></i><p>{{cl.name}}</p></a><hr>                
                 {% endfor %}
               </div>
+              <a href="{% url 'encyclopedia:newsletter' %}" class="w3-bar-item w3-button" style="width: 100%"><p>Newsletter System</p></a>
               <a href="{% url 'encyclopedia:settings' %}" class="w3-bar-item w3-button" style="width: 100%"><p>Account Settings</p></a>
               <a href="{% url 'encyclopedia:logout' %}" class="w3-bar-item w3-button" style="width: 100%"><p>Logout</p></a>
               {% else %} 
@@ -53,63 +52,6 @@
             <p style="text-align: center;">Made with Love <br>from <a href="https://github.com/PhytonKing">PhytonKing</a> and the IBO Community.</p>
           </nav>
 
-
-
-
-
-
-
-
-
-<!--
-        <div class="row">
-            <div class="sidebar col-lg-2 col-md-3">
-                <a href="{% url 'encyclopedia:index' %}" class="w3-bar-item w3-button" style="width: 100%"><h2>IBONews</h2></a>
-                <br><br>
-                <form action="{% url 'encyclopedia:search' %}" method="post">
-                    {% csrf_token %}
-                    <input class="search" type="text" name="q" placeholder="Search IBONews">
-                </form><br>
-                <div>
-                    <a href="{% url 'encyclopedia:about' %}" class="w3-bar-item w3-button" style="width: 100%"><p>About Us</p></a>
-                </div><br>
-                {% if user.is_authenticated %}
-                    <div>
-                        <a href="{% url 'encyclopedia:random' %}" class="w3-bar-item w3-button" style="width: 100%"><p>Random Page</p></a>
-                    </div><br>
-                    <div>
-                        <a href="{% url 'encyclopedia:featured' %}" class="w3-bar-item w3-button" style="width: 100%"><p>Featured Articles</p></a>
-                    </div><br>
-                    <div>
-                        <a href="{% url 'encyclopedia:liked' %}" class="w3-bar-item w3-button" style="width: 100%"><p>My Liked Articles</p></a>
-                    </div><br>
-                    <a onclick="myAccFunc()" href="javascript:void(0)" class="w3-button w3-block w3-left-align" id="myBtn">
-                        <p>Articles by Topic</p> <i class="fa fa-caret-down" id="sign"></i>
-                    </a>
-                    <div id="demoAcc" class="w3-bar-block w3-hide w3-padding-large w3-medium">
-                        {% for cl in Classification %}
-                            <a href="{% url 'encyclopedia:topic' cl.name %}" class="w3-bar-item w3-button ">"<p>{{cl.name}}</p></a>                
-                            {% endfor %}
-                        Add topics to go by and make a filter site for it.
-                    </div><br>
-                
-                    {% block nav %}
-                    {% endblock %}
-                    <div>
-                        <a href="{% url 'encyclopedia:settings' %}" class="w3-bar-item w3-button" style="width: 100%"><p>Account Settings</p></a>
-                    </div><br>
-                    <div>
-                        <a href="{% url 'encyclopedia:logout' %}" class="w3-bar-item w3-button" style="width: 100%"><p>Logout</p></a>
-                    </div><br>
-                {% else %}
-                    <div>
-                        <a href="{% url 'encyclopedia:login' %}" class="w3-bar-item w3-button" style="width: 100%"><p>Login/Register</p></a>
-                    </div>
-                {% endif %}
-                
-                
-            </div>
-            -->
             <div class="w3-main" style="margin-left:275px">
                 <!-- Push down content on small screens -->
                 <div class="w3-hide-large" style="margin-top:83px"></div>
@@ -121,10 +63,14 @@
             // Accordion 
             function myAccFunc() {
               var x = document.getElementById("demoAcc");
+              var y = document.getElementById("caret");
               if (x.className.indexOf("w3-show") == -1) {
                 x.className += " w3-show";
+                y.className = y.className.replace(" fa-caret-right"," fa-caret-down")
               } else {
                 x.className = x.className.replace(" w3-show", "");
+                y.className = y.className.replace(" fa-caret-down"," fa-caret-right");
+                
               }
             }
         </script>

@@ -37,16 +37,13 @@ def settings(request: HttpRequest):
         setting.save()
         return render(request, "encyclopedia/settings.html", {"message":"Settings Saved","dm": hasDarkMode(u),"subscribe":setting.subscriber, "darkMode":setting.DarkMode})
 
-"""
-def unsubscriber_view(request: HttpRequest, email: str):
-    try:
-        x = Subscriber.objects.get(subscriber_email=email)
-        x.delete()
-    except Subscriber.DoesNotExist:
-        pass
-    return render(request, "encyclopedia/unsubscribe.html", {"email":email})
-"""
-
+@login_required(login_url='/login')
+def newsletter_management(request: HttpRequest):
+    if request.user.is_staff:
+        subscriber_count = Settings.objects.filter(subscriber=True).count()
+        if request.method == "GET":
+            return render(request, "encyclopedia/newsletter.html", {"posts": Article.objects.filter(featured=True), "dm":hasDarkMode(request.user),"Classification": Classification.objects.all(), "subscriber_count":subscriber_count})
+        
 # Create your views here.
 def index(request: HttpRequest):
     return render(request, "encyclopedia/index.html", {"posts": Article.objects.all(), "Classification": Classification.objects.all(),"dm": hasDarkMode(request.user)})
@@ -216,9 +213,12 @@ def register_view(request: HttpRequest):
         email = request.POST["email"]
         password = request.POST["password"]
         cPassword = request.POST["c_password"]
+        subscribe = False if request.POST["subscribe"] is None else True
         if password == cPassword:
             l = User(username=username, email=email, password=password, first_name=fname, last_name=lname)
             l.save()
+            set = Settings(for_user=l, subscriber=subscribe, DarkMode=False)
+            set.save()
             login(request,l)
             return HttpResponseRedirect(reverse("encyclopedia:index"))
         else:

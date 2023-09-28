@@ -9,6 +9,7 @@
 
 {% block body %}
     <h1>Search IBONews</h1>
+    <hr>
     <form action="{% url 'encyclopedia:search' %}" method="post">
         {% csrf_token %}
         <input class="search" type="text" name="q" placeholder="Search IBONews" style="width:500px;">

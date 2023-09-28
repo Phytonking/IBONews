@@ -1,7 +1,7 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-    Featured Articles
+    Admin - Newsletter Settings
 {% endblock %}
 
 {% block body %}
@@ -18,9 +18,19 @@
           margin-right: 20px;
         }
       </style>
-
-      <h1>Featured Articles</h1>
+      <h1>Newsletter System</h1>
+      <p>{{subscriber_count}} subscribers to Newsletter</p>
+      <a href="" class="w3-button w3-green">Send Newsletter to the People!</a>
       <hr>
+      {% if count == 0 %}
+        <h3>No Articles found or published yet. Come back soon!</h3>
+      {% else %}
+        <h3>Instructions</h3>
+        <p>All articles which are marked as "Featured" on the website are present here and will be sent with the newsletter when the newsletter is ordered to be sent.</p>
+        <p>If changes are needed to the articles, go to the <a href="/admin">admin site</a> and demark the Featured category on the articles. </p>
+        <p>Once the button is pressed, the mail will be sent immediately, <b>ONLY DO IT WHEN EVERYTHING IS READY TO GO.</b> </p>
+        <hr>
+        <h3>Articles to be sent: </h3>
         {% for x in posts %} 
             
                 <div class="container">
@@ -36,4 +46,5 @@
                 </div>
            
         {% endfor %}
+    {% endif %}
 {% endblock %}

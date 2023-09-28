@@ -22,5 +22,6 @@ urlpatterns = [
     path("like/<uuid:articleID>", wv.like, name="like"),
     #path("unsubscribe/<str:email>", wv.unsubscriber_view, name="unsubscribe"),
     path("settings", wv.settings, name="settings"),
+    path("newsletter", wv.newsletter_management, name="newsletter")
     
 ]
