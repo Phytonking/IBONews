@@ -42,7 +42,9 @@
                     <a href="{% url 'encyclopedia:topic' cl.name %}" class="w3-bar-item w3-button"><i class="fa-solid fa-caret-right"></i><p>{{cl.name}}</p></a><hr>                
                 {% endfor %}
               </div>
-              <a href="{% url 'encyclopedia:newsletter' %}" class="w3-bar-item w3-button" style="width: 100%"><p>Newsletter System</p></a>
+              {% if user.is_superuser %}
+                <a href="{% url 'encyclopedia:newsletter' %}" class="w3-bar-item w3-button" style="width: 100%"><p>Newsletter System</p></a>
+              {% endif %}
               <a href="{% url 'encyclopedia:settings' %}" class="w3-bar-item w3-button" style="width: 100%"><p>Account Settings</p></a>
               <a href="{% url 'encyclopedia:logout' %}" class="w3-bar-item w3-button" style="width: 100%"><p>Logout</p></a>
               {% else %} 

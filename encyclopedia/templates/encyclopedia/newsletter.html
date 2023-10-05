@@ -9,7 +9,6 @@
         .container {
           display: flex;
           align-items: center;
-          border: 2px black solid;
         }
       
         .image {
@@ -20,7 +19,11 @@
       </style>
       <h1>Newsletter System</h1>
       <p>{{subscriber_count}} subscribers to Newsletter</p>
-      <a href="" class="w3-button w3-green">Send Newsletter to the People!</a>
+      <form action="{% url 'encyclopedia:newsletter' %}" method="post">
+        {% csrf_token %}
+        <input type="submit" class="w3-button w3-green" value="Send Newsletter to the People!">
+      </form>
+      <h3 style="color: green;">{{message}}</h3>
       <hr>
       {% if count == 0 %}
         <h3>No Articles found or published yet. Come back soon!</h3>

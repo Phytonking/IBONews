@@ -1,3 +1,4 @@
+from sre_constants import SUCCESS
 from django.shortcuts import render, redirect
 from encyclopedia.util import *
 from django import forms
@@ -42,7 +43,23 @@ def newsletter_management(request: HttpRequest):
     if request.user.is_staff:
         subscriber_count = Settings.objects.filter(subscriber=True).count()
         if request.method == "GET":
-            return render(request, "encyclopedia/newsletter.html", {"posts": Article.objects.filter(featured=True), "dm":hasDarkMode(request.user),"Classification": Classification.objects.all(), "subscriber_count":subscriber_count})
+            return render(request, "encyclopedia/newsletter.html", {"posts": Article.objects.filter(featured=True), "dm":hasDarkMode(request.user),"Classification": Classification.objects.all(), "subscriber_count":subscriber_count})   
+        else:
+            l = None
+            subs = Settings.objects.filter(subscriber=True)
+            subs_list = []
+            for k in subs:
+                subs_list.append(k.for_user)
+            for x in subs_list:
+                l = create_newsletter_email(f"{datetime.datetime.now().strftime('%B')} Newsletter", x, Article.objects.filter(featured=True))
+                if l == -1:
+                    break
+            if l == -1:
+                return render(request, "encyclopedia/newsletter.html",{"posts": Article.objects.filter(featured=True), "dm":hasDarkMode(request.user),"Classification": Classification.objects.all(), "subscriber_count":subscriber_count, "message":"FAILED"})
+            else:
+                return render(request, "encyclopedia/newsletter.html",{"posts": Article.objects.filter(featured=True), "dm":hasDarkMode(request.user),"Classification": Classification.objects.all(), "subscriber_count":subscriber_count, "message":"SUCCESS"})
+    else:
+        return HttpResponseRedirect(reverse("encyclopedia:index"))
         
 # Create your views here.
 def index(request: HttpRequest):
@@ -213,7 +230,10 @@ def register_view(request: HttpRequest):
         email = request.POST["email"]
         password = request.POST["password"]
         cPassword = request.POST["c_password"]
-        subscribe = False if request.POST["subscribe"] is None else True
+        if request.POST["subscribe"] is None:
+            subscribe = False
+        else:
+            subscribe = True
         if password == cPassword:
             l = User(username=username, email=email, password=password, first_name=fname, last_name=lname)
             l.save()
