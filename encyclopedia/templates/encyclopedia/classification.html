@@ -31,7 +31,7 @@
                     <a href="{% url 'encyclopedia:article' x.article_id %}">
                         <h2>{{x.title}}</h2>
                     </a>
-                    <p>By {{x.author}}, Published {{x.date_published}}</p>
+                    <p>By {{x.author.name}}, Published {{x.date_published}}</p>
                     <hr>
                     <p>{{x.description}}</p>
                     </div>
